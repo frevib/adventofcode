@@ -525,3 +525,27 @@ for i in inputList:
 print valid
 
 
+
+print '==== second star =============='
+print 'amount of lines: ' + str(len(inputList))
+
+def anagramExistsInList(wordCount):
+	startIndex = 1
+	for i in xrange(0, wordCount):
+		for j in xrange(startIndex, wordCount):
+			if ''.join(sorted(line[i])) == ''.join(sorted(line[j])):
+				print line
+				print line[i] + ' : ' + line[j]
+				# valid -= 1
+				return -1
+		startIndex += 1
+	return 0
+
+valid2 = len(inputList)
+for i in inputList:
+	line = i.split(' ')
+	wordCount = len(line)
+	valid2 += anagramExistsInList(wordCount)
+
+print valid2
+
