@@ -1,92 +1,117 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Main {
+
+	private static List<Node> nodeList;
 
 	public static void main(String[] args) {
 		System.out.println("## Generic tree implementation:\n");
 
-		Node tree = new Node();
-
-		// build nodes list
-		List<Node> nodeList = new ArrayList<Node>();
+		// build list of nodes
+		nodeList = new ArrayList<Node>();
 		for (String item : input.split("\n")) {
-			// node with children
+
+			Node node = new Node();
+			String[] nameAndWeight = item.split("\\p{javaWhitespace}");
+			String name = nameAndWeight[0];
+			String weight = nameAndWeight[1].substring(1, nameAndWeight[1].indexOf(")"));
+			node.setName(name);
+			node.setWeight(Integer.parseInt(weight));
+
+			// nodes with children
 			if (item.contains("->")) {
 				String[] parentChild = item.split("->");
-
-				Node node = new Node();
-				node.setName(parentChild[0].split("\\p{javaWhitespace}")[0]);
-
 				for (String childName : parentChild[1].split(",")) {
 					Node childNode = new Node();
 					childNode.setName(childName.trim());
 					node.addChild(childNode);
 				}
+			}
 
-				nodeList.add(node);
-			} else {
-				Node node = new Node();
-				node.setName(item.split("\\p{javaWhitespace}")[0]);
-				nodeList.add(node);
+			nodeList.add(node);
+		}
+
+		// First star
+		Set<String> childSet = new HashSet<String>();
+		for (Node node : nodeList) {
+			for (Node child : node.getChildren()) {
+				childSet.add(child.getName());
 			}
 		}
 
-
-
-		for (Node nodeObj : nodeList) {
-			if (nodeObj.getParent() != null) {
-
+		Node rootNode = null;
+		for (Node node : nodeList) {
+			if (!childSet.contains(node.getName())) {
+				System.out.println("Root node: " + node.getName());
+				rootNode = node;
 			}
 		}
 
+		// Second star
+		buildTree(rootNode);
+		traverseTree(rootNode);
+		findUnbalance(rootNode);
 	}
 
 
 
 
-
-	public static void testTraverse() {
-		// Root node
-		Node rootNode = new Node();
-		rootNode.setName("Root node!!");
-
-		// Children
-		Node child1 = new Node();
-		child1.setName("chilllld one!");
-
-		Node child2 = new Node();
-		child2.setName("chilld 2!");
-
-		Node child3 = new Node();
-		child3.setName("chilllld 3!");
-
-		// Children of children
-		Node child1OfChild1 = new Node();
-		child1OfChild1.setName("Child1 of child1");
-
-		Node child2OfChild1 = new Node();
-		child2OfChild1.setName("Child2 of child2");
-
-		child1.setChildren(new ArrayList<Node>(Arrays.asList(child1OfChild1, child2OfChild1)));
-
-		rootNode.addChild(child1);
-		rootNode.addChild(child2);
-		rootNode.addChild(child3);
-
-		traverse(rootNode);
+	public static void buildTree(Node node) {
+		List<Node> children = node.getChildren();
+		if (children != null) {
+			for (int i = 0; i < children.size(); i++) {
+				for (Node node1 : nodeList) {
+					if (children.get(i).getName().equals(node1.getName())) {
+						node.setChild(i, node1);
+						buildTree(node.getChildren().get(i));
+					}
+				}
+				node.addWeight(children.get(i).getTotalWeight());
+			}
+		}
 	}
 
-	public static void traverse(Node node) {
+	public static void traverseTree(Node node) {
 		if (node.getChildren() != null) {
-			System.out.println("Data: " + node.getName());
-			for (Node childNode: node.getChildren()) {
-				traverse(childNode);
+			for (Node child : node.getChildren()) {
+				traverseTree(child);
 			}
 		}
 	}
 
+	public static void findUnbalance(Node node) {
+		if (node.getChildren() != null) {
+
+			List<Node> children = node.getChildren();
+			List<Integer> totalWeights = new ArrayList<Integer>();
+			for (Node child : children) {
+				totalWeights.add(child.getTotalWeight());
+				System.out.print("Total weights: " + child.getTotalWeight() + " ");
+			}
+			System.out.println("Node name: " + node.getName());
+
+			for (int i = 0; i < totalWeights.size(); i++) {
+				if (Collections.frequency(totalWeights, totalWeights.get(i)) == 1) {
+					System.out.println("Parent: " + node.getName() + " Weight unbalanced child: " + totalWeights.get(i));
+					findUnbalance(children.get(i));
+				}
+			}
+		}
+	}
+
+	private static String testInput = "pbga (66)\n" +
+			"xhth (57)\n" +
+			"ebii (61)\n" +
+			"havc (66)\n" +
+			"ktlj (57)\n" +
+			"fwft (72) -> ktlj, cntj, xhth\n" +
+			"qoyq (66)\n" +
+			"padx (45) -> pbga, havc, qoyq\n" +
+			"tknk (41) -> ugml, padx, fwft\n" +
+			"jptl (61)\n" +
+			"ugml (68) -> gyxo, ebii, jptl\n" +
+			"gyxo (61)\n" +
+			"cntj (57)";
 
 	private static String input =
 			"jovejmr (40)\n" +

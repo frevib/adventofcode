@@ -6,6 +6,8 @@ public class Node {
 	private String name;
 	private List<Node> children = new ArrayList<Node>();
 	private Node parent;
+	private int weight;
+	private int totalWeight = 0;
 
 	public String getName() {
 		return name;
@@ -23,6 +25,10 @@ public class Node {
 		this.children = children;
 	}
 
+	public void setChild(int index, Node node) {
+		children.set(index, node);
+	}
+
 	public void addChild(Node child) {
 		children.add(child);
 	}
@@ -35,5 +41,20 @@ public class Node {
 		this.parent = parent;
 	}
 
+	public int getWeight() {
+		return weight;
+	}
 
+	public void setWeight(int weight) {
+		this.weight = weight;
+		this.totalWeight += weight;
+	}
+
+	public void addWeight(int weight) {
+		this.totalWeight += weight;
+	}
+
+	public int getTotalWeight() {
+		return totalWeight;
+	}
 }
