@@ -12,7 +12,7 @@ public class Main {
 		for (String item : input.split("\n")) {
 
 			Node node = new Node();
-			String[] nameAndWeight = item.split("\\p{javaWhitespace}");
+			String[] nameAndWeight = item.split("\\s}");
 			String name = nameAndWeight[0];
 			String weight = nameAndWeight[1].substring(1, nameAndWeight[1].indexOf(")"));
 			node.setName(name);
