@@ -11,6 +11,7 @@ public class Main {
     public static List<String> inputList;
     public static int timesEncountered = 0;
     public static int killRecursion;
+    public static int numberOfGroups = 0;
 
     public static void main(String[] args) throws IOException {
         String input = readFile();
@@ -18,40 +19,43 @@ public class Main {
         inputList = new ArrayList<String>(Arrays.asList(inputArray));
 
         killRecursion = 0;
-        int numberOfGroups = 0;
-        Set<Integer> encounteredPrograms = new HashSet<Integer>();
+//        int numberOfGroups = 0;
+        Set<Integer> encounteredIds = new HashSet<Integer>();
 
             for (String program : inputList) {
-                killRecursion = 0;
-                encounterNumber(program, new HashSet<Integer>(), 0);
+                if (!encounteredIds.contains(Integer.parseInt(program.split("<->")[0].trim()))) {
+                    killRecursion = 0;
+                    encounterNumber(program, encounteredIds ,0);
+                }
             }
-            numberOfGroups++;
+//            numberOfGroups++;
 
         System.out.println("times encountered: " + timesEncountered);
         System.out.println("number of groups: " + numberOfGroups);
     }
 
-    public static void encounterNumber(String program, Set<Integer> encounteredNumbers, int numberToFind) {
+    public static void encounterNumber(String program, Set<Integer> encounteredIds, int recursionDept) {
         if (killRecursion == 1) {
             return;
         }
         String[] split = program.split("<->");
         int fromId = Integer.parseInt(split[0].trim());
-        encounteredNumbers.add(fromId);
+        encounteredIds.add(fromId);
 
-        for (String toIdString : split[1].split(",")) {
+        String[] splitToIds = split[1].split(",");
+        for (String toIdString : splitToIds) {
             int toId = Integer.parseInt(toIdString.trim());
 
-            if (toId == numberToFind) {
-                timesEncountered++;
-                killRecursion = 1;
-                return;
-            }
-
-            if (!encounteredNumbers.contains(toId)) {
-                encounterNumber(inputList.get(toId), encounteredNumbers, numberToFind);
+            if (!encounteredIds.contains(toId)) {
+                encounterNumber(inputList.get(toId), encounteredIds, recursionDept + 1);
             }
         }
+        if (recursionDept == 0) {
+            numberOfGroups++;
+            killRecursion = 1;
+            return;
+        }
+
     }
 
     public static String testInput = "0 <-> 2\n" +
