@@ -25,7 +25,8 @@ public class Main {
             for (String program : inputList) {
                 if (!encounteredIds.contains(Integer.parseInt(program.split("<->")[0].trim()))) {
                     killRecursion = 0;
-                    encounterNumber(program, encounteredIds ,0);
+                    encounterNumber(program, encounteredIds ,0
+                    );
                 }
             }
 //            numberOfGroups++;
