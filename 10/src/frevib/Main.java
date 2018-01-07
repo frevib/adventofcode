@@ -66,8 +66,6 @@ public class Main {
         int pos = 0;
         int skipSize = 0;
         for (int i = 0; i < 64; i++) {
-//            System.out.println("iteration: " + i);
-
             for (Integer lengthNumber : lengthsSecondStar) {
                 int numbersListSize = numbersList.size();
                 if (pos + lengthNumber > numbersList.size() - 1) {
@@ -104,11 +102,6 @@ public class Main {
                 }
                 pos = (pos + lengthNumber + skipSize) % (numbersListSize);
                 skipSize++;
-
-//            for (Integer number : numbersList) {
-//                System.out.print(number + ",");
-//            }
-//            System.out.println("\n");
             }
         }
 
