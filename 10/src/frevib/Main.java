@@ -61,12 +61,18 @@ public class Main {
         }
         lengthsSecondStar.addAll(Arrays.asList(17, 31, 73, 47, 23));
 
+        List<Integer> lengths14 = new ArrayList<Integer>();
+        for (int i = 0; i < input14.length(); i ++) {
+            lengths14.add((int) input14.charAt(i));
+        }
+        lengths14.addAll(Arrays.asList(17, 31, 73, 47, 23));
+
 //        numbersList = numbersListTest;
 
         int pos = 0;
         int skipSize = 0;
         for (int i = 0; i < 64; i++) {
-            for (Integer lengthNumber : lengthsSecondStar) {
+            for (Integer lengthNumber : lengths14) {
                 int numbersListSize = numbersList.size();
                 if (pos + lengthNumber > numbersList.size() - 1) {
                     numbersList.addAll(numbersList);
@@ -143,6 +149,7 @@ public class Main {
     private static String inputSecondStarTest2 = "1,2,3";
     private static String inputSecondStarTest3 = "";
     private static String inputSecondStarTest4 = "RIMBUOD";
+    private static String input14 = "flqrgnkx-0";
 //            e1a65bfb5a5ce396025fab5528c25a87
 //            e1a65bfb5a5ce39625fab5528c25a87
 
